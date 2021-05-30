@@ -32,6 +32,6 @@ jobs:
             cd ~/my-app/
             git clone https://github.com/toxuh/ts-back-temp.git
             cd ts-back-temp
-            npm install
-            npm run tsc
-            pm2 start dist/app.js
+            sudo npm install
+            sudo npm run tsc
+            sudo pm2 start dist/app.js
