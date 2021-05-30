@@ -27,10 +27,10 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            mkdir -p ~/my-app/ # create a new folder
-            cd ~/my-app/ # navigate into the folder
-            git clone https://github.com/toxuh/ts-back-temp.git app # clone the repo into the 'app' folder
-            cd ts-back-temp # navigate into the repo
-            npm install # install dependencies 
+            mkdir -p ~/my-app/
+            cd ~/my-app/
+            git clone https://github.com/toxuh/ts-back-temp.git
+            cd ts-back-temp
+            npm install
             tsc
-            pm2 start dist/app.js # start as a background service.
+            pm2 start dist/app.js
