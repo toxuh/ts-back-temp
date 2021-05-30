@@ -10,7 +10,7 @@ const app = express();
 
 app.use(json());
 
-app.use('/tasks', taskRouter);
+app.use('/task', taskRouter);
 
 connect(
   settings.dbSettings,
