@@ -26,18 +26,14 @@ jobs:
           host: ${{secrets.SSH_HOST}}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          env:
-            APP_HOST: ${{ secrets.APP_HOST }}
-            APP_PORT: ${{ secrets.APP_PORT }}
-            DB_USER: ${{ secrets.DB_USER }}
-            DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-            DB_COLLECTION: ${{ secrets.DB_COLLECTION }}
           script: |
             rm -rf ~/my-app
             mkdir -p ~/my-app/
             cd ~/my-app/
             git clone https://github.com/toxuh/ts-back-temp.git
             cd ts-back-temp
+            touch .env
+            echo APP_HOST =${{ secrets.APP_HOST }} APP_PORT =${{ secrets.APP_PORT }} DB_USER =${{ secrets.DB_USER }} DB_PASSWORD =${{ secrets.DB_PASSWORD }} DB_COLLECTION =${{ secrets.DB_COLLECTION }} >> .env
             sudo npm install
             npm run build
             pm2 delete node-test
