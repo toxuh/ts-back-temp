@@ -34,4 +34,4 @@ jobs:
             cd ts-back-temp
             sudo npm install
             npm run build
-            npm run server-run
+            pm2 start dist/app.js
