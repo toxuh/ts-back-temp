@@ -27,6 +27,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
+            rm -rf ~/my-app
             mkdir -p ~/my-app/
             cd ~/my-app/
             git clone https://github.com/toxuh/ts-back-temp.git
