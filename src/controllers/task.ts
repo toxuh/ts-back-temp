@@ -1,7 +1,7 @@
 import { Response, Request } from 'express';
 import { Error } from 'mongoose';
 
-import Task, { TaskType } from '../models/Task';
+import Task, { TaskType } from '../models/task';
 
 export const getAllTasks = (req: Request, res: Response): void => {
   Task.find((err: Error, tasks: TaskType[]) => {
