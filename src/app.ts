@@ -1,18 +1,30 @@
-import * as express from 'express';
+import express from 'express';
+import passport from 'passport';
+import flash from 'express-flash';
 import { connect, Error } from 'mongoose';
-import { json } from 'body-parser';
+import { json, urlencoded } from 'body-parser';
 
 import settings from './config';
 
-import taskRouter from './api/tasks';
 import userRouter from './api/users';
+
+import URL from './utils/url';
 
 const app = express();
 
 app.use(json());
+app.use(urlencoded({ extended: false }));
+app.use(passport.initialize());
 
-app.use('/tasks', taskRouter);
-app.use('/user', userRouter);
+app.use(URL('auth'), userRouter);
+app.use(
+  URL('users'),
+  passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    res.json('You are here');
+  },
+);
+app.use(flash());
 
 connect(
   settings.dbSettings,

@@ -1,34 +1,87 @@
-import { Response, Request } from 'express';
-import { genSaltSync, hashSync } from 'bcrypt-nodejs';
+import { Response, Request, NextFunction } from 'express';
+import { body, check } from 'express-validator';
+import passport from 'passport';
 
-import User, { UserType } from '../models/user';
+import User from '../models/user';
 
-export const registerUser = (req: Request, res: Response): void => {
-  const { username, password }: UserType = req.body;
-  const errors = [];
+import initializeLocalPassport from './passport-local';
+import initializeJWTPassport from './passport-jwt';
+import { generateToken } from '../utils/tokens';
 
-  if (!username.length) {
-    errors.push({ message: 'Username required' });
+initializeLocalPassport(passport);
+initializeJWTPassport(passport);
+
+export const registerUser = async (
+  req: Request,
+  res: Response,
+): Promise<Response> => {
+  await check('email', 'Email is not valid').isEmail().run(req);
+  await check('password', 'Password must be at least 4 characters long')
+    .isLength({ min: 4 })
+    .run(req);
+  await body('email').normalizeEmail({ gmail_remove_dots: false }).run(req);
+
+  const foundUser = await User.findOne({ email: req.body.email });
+
+  if (foundUser) {
+    return res.status(403).json({ error: 'Email is already in use' });
   }
 
-  if (!password.length) {
-    errors.push({ message: 'Password required' });
-  }
-
-  if (errors.length) {
-    res.send(errors);
-
-    return;
-  }
-
-  const user = new User({
-    username,
-    password: hashSync(password, genSaltSync(8)),
+  const newUser = new User({
+    email: req.body.email,
+    password: req.body.password,
   });
 
-  user.save().then(() => {
-    res.send('Successfully');
-  });
+  await newUser.save();
+
+  const token = generateToken(newUser);
+
+  res.status(200).json({ token });
 };
 
-export const loginUser = (): void => {};
+export const loginUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  passport.authenticate(
+    'local',
+    { session: false },
+    async (err, user, info) => {
+      try {
+        if (err || !user) {
+          const error = new Error(info.message);
+
+          return next(error);
+        }
+
+        req.login(user, { session: false }, async (error) => {
+          if (error) return next(error);
+
+          const token = generateToken(user);
+
+          return res.json({ token });
+        });
+      } catch (error) {
+        return next(error);
+      }
+      // if (err) {
+      //   return res.status(400).json({ error: 'Something went wrong' });
+      // }
+      //
+      // if (!user) {
+      //   return res.status(400).json({ error: 'No user with this credentials' });
+      // }
+      //
+      // req.login(user, { session: false }, async (error) => {
+      //   if (error) {
+      //     res.send(error);
+      //   }
+      //
+      //   const token = generateToken(user);
+      //
+      //   res.status(200).json({ token });
+      // });
+    },
+  )(req, res, next);
+};
