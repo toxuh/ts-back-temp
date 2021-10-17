@@ -16,7 +16,7 @@ export const getPatientsList = async (
     const users = await User.find({ role: 'USER' });
 
     return res.send(users);
-  } else {
-    return res.send({ message: 'Not enough rights' });
   }
+
+  return res.send({ message: 'Not enough rights' });
 };

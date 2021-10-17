@@ -15,6 +15,8 @@ const SessionSchema = new Schema<SessionType>(
     email: { type: String, required: true },
     role: { type: String, required: true },
     ip: { type: String, required: true },
+    navigator: { type: String, required: true },
+    system: { type: String, required: true },
   },
   { timestamps: true },
 );

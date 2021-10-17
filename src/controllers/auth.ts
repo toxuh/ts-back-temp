@@ -3,13 +3,12 @@ import { body, check } from 'express-validator';
 import passport from 'passport';
 
 import Session from '../models/session';
-import User, { UserType } from '../models/user';
+import User from '../models/user';
 
 import initializeLocalPassport from './passport-local';
 import initializeJWTPassport from './passport-jwt';
 
 import { generateToken } from '../utils/tokens';
-import { prepareUserDTO } from '../utils/user';
 
 initializeLocalPassport(passport);
 initializeJWTPassport(passport);
@@ -46,7 +45,11 @@ export const loginUser = async (
   req: Request,
   res: Response,
   next: NextFunction,
-): Promise<void> => {
+): Promise<Response | void> => {
+  if (!req.body.navigator) {
+    return res.send({ message: 'You are not allowed to sign in' });
+  }
+
   passport.authenticate(
     'local',
     { session: false },
@@ -69,6 +72,8 @@ export const loginUser = async (
             email: user.email,
             role: user.role,
             ip: req.ip.split(':')[3],
+            navigator: req.body.navigator,
+            system: req.body.system,
           });
 
           await newSession.save();
