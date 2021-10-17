@@ -6,7 +6,9 @@ import { json, urlencoded } from 'body-parser';
 
 import settings from './config';
 
-import userRouter from './api/users';
+import authRouter from './api/auth';
+import patientRouter from './api/patient';
+import userRouter from './api/user';
 
 import URL from './utils/url';
 
@@ -16,13 +18,16 @@ app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(passport.initialize());
 
-app.use(URL('auth'), userRouter);
+app.use(URL('auth'), authRouter);
 app.use(
-  URL('users'),
+  URL('user'),
   passport.authenticate('jwt', { session: false }),
-  (req, res, next) => {
-    res.json('You are here');
-  },
+  userRouter,
+);
+app.use(
+  URL('patients'),
+  passport.authenticate('jwt', { session: false }),
+  patientRouter,
 );
 app.use(flash());
 
