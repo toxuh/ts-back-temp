@@ -14,8 +14,8 @@ import URL from './utils/url';
 
 const app = express();
 
-app.use(json());
-app.use(urlencoded({ extended: false }));
+app.use(json({ limit: '50mb' }));
+app.use(urlencoded({ extended: false, limit: '50mb' }));
 app.use(passport.initialize());
 
 app.use(URL('auth'), authRouter);

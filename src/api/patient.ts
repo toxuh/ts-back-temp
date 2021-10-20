@@ -6,5 +6,6 @@ const userRouter = express.Router();
 
 userRouter.get('', controller.getPatientsList);
 userRouter.post('', controller.createPatient);
+userRouter.delete('', controller.deletePatient);
 
 export default userRouter;

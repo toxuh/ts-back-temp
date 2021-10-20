@@ -5,6 +5,7 @@ export type PatientType = Document & {
   _id: string;
   createdAt: Date;
   updatedAt: Date;
+  photo: File;
   name: {
     firstName: string;
     middleName: string;
@@ -15,6 +16,11 @@ export type PatientType = Document & {
     email: string;
     phone: string;
     phone2: string;
+  };
+  document: {
+    number: string;
+    code: string;
+    date: Date;
   };
   address: {
     city: string;
@@ -28,6 +34,7 @@ export type PatientType = Document & {
 const patientSchema = new Schema<PatientType>(
   {
     _id: { type: String, default: v4 },
+    photo: { type: String, required: true },
     name: {
       firstName: { type: String, required: true },
       middleName: { type: String, required: true },
@@ -38,6 +45,11 @@ const patientSchema = new Schema<PatientType>(
       email: { type: String, required: true },
       phone: { type: String, required: true },
       phone2: { type: String },
+    },
+    document: {
+      number: { type: String, required: true },
+      code: { type: String, required: true },
+      date: { type: Date, required: true },
     },
     address: {
       city: { type: String, required: true },
