@@ -2,7 +2,7 @@
 
 name: deploy
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
@@ -38,6 +38,8 @@ jobs:
             echo DB_USER=${{ secrets.DB_USER }} >> .env
             echo DB_PASSWORD =${{ secrets.DB_PASSWORD }} >> .env
             echo DB_COLLECTION =${{ secrets.DB_COLLECTION }} >> .env
+            echo API_SECRET =${{ secrets.API_SECRET }} >> .env
+            echo API_ISSUER =${{ secrets.API_ISSUER }} >> .env
             sudo npm install
             npm run build
             pm2 delete node-test
