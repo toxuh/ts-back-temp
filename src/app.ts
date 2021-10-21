@@ -9,6 +9,7 @@ import settings from './config';
 import authRouter from './api/auth';
 import patientRouter from './api/patient';
 import userRouter from './api/user';
+import visitRouter from './api/visit';
 
 import URL from './utils/url';
 
@@ -28,6 +29,11 @@ app.use(
   URL('patients'),
   passport.authenticate('jwt', { session: false }),
   patientRouter,
+);
+app.use(
+  URL('visits'),
+  passport.authenticate('jwt', { session: false }),
+  visitRouter,
 );
 app.use(flash());
 
