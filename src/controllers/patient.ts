@@ -34,13 +34,7 @@ export const createPatient = async (
         `${v4()}.jpg`,
       );
 
-      fs.writeFile(
-        photoPath,
-        photo.replace(/^data:image\/jpg;base64,/, ''),
-        (err) => {
-          console.log(err);
-        },
-      );
+      const photoRaw = photo.replace(/^data:image\/jpeg;base64,/, '');
 
       const newPatient = new Patient({
         ...rest,
@@ -48,6 +42,12 @@ export const createPatient = async (
       });
 
       await newPatient.save();
+
+      const bufferData = Buffer.from(photoRaw, 'base64');
+
+      fs.writeFile(photoPath, bufferData, 'base64', (err) => {
+        console.log(err);
+      });
 
       return res.send({ message: 'success' });
     } catch (e) {
