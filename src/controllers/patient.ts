@@ -58,6 +58,23 @@ export const createPatient = async (
   return res.send({ message: 'Not enough rights' });
 };
 
+export const getPatientById = async (
+  req: Request,
+  res: Response,
+): Promise<Response> => {
+  if (isAdvancedRole(req.user as UserType)) {
+    try {
+      const patient = await Patient.findById(req.params.id);
+
+      return res.send(patient);
+    } catch (e) {
+      return res.send({ message: 'error', details: e });
+    }
+  }
+
+  return res.send({ message: 'Not enough rights' });
+};
+
 export const deletePatient = async (
   req: Request,
   res: Response,
