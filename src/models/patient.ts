@@ -40,6 +40,7 @@ const patientSchema = new Schema<PatientType>(
       middleName: { type: String, required: true },
       lastName: { type: String, required: true },
       additional: { type: String },
+      birthday: { type: Date, required: true },
     },
     contacts: {
       email: { type: String, required: true },
