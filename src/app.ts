@@ -7,7 +7,10 @@ import { json, urlencoded } from 'body-parser';
 import settings from './config';
 
 import authRouter from './api/auth';
+import hospitalRouter from './api/hospital';
+import medicRouter from './api/medic';
 import patientRouter from './api/patient';
+import registererRouter from './api/registerer';
 import userRouter from './api/user';
 import visitRouter from './api/visit';
 
@@ -34,6 +37,21 @@ app.use(
   URL('visits'),
   passport.authenticate('jwt', { session: false }),
   visitRouter,
+);
+app.use(
+  URL('hospitals'),
+  passport.authenticate('jwt', { session: false }),
+  hospitalRouter,
+);
+app.use(
+  URL('registerers'),
+  passport.authenticate('jwt', { session: false }),
+  registererRouter,
+);
+app.use(
+  URL('medics'),
+  passport.authenticate('jwt', { session: false }),
+  medicRouter,
 );
 app.use(flash());
 

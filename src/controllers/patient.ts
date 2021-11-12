@@ -68,7 +68,7 @@ export const getPatientById = async (
 
       return res.send(patient);
     } catch (e) {
-      return res.send({ message: 'error', details: e });
+      return res.status(404).send({ message: 'Patient not found' });
     }
   }
 

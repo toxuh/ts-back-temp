@@ -1,7 +1,7 @@
 {
   "name": "ts-back",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "dist/app.js",
   "repository": "git@github.com:toxuh/ts-back-temp.git",
   "author": "Zakharov Anton <zakharov.toxa@gmail.com>",
   "license": "MIT",
